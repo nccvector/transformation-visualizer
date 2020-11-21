@@ -78,6 +78,25 @@ class Frame:
             [np.sin(angle), np.cos(angle), 0],
             [0, 0, 1]
         ])
+
+    def rotate_about_vector(self, vector, angle):
+        angle = np.deg2rad(angle)
+
+        vector /= np.linalg.norm(vector)    # Normalizing
+        x = vector[0]
+        y = vector[1]
+        z = vector[2]
+
+        # Precomputing constants
+        ctheta = np.cos(angle)
+        stheta = np.sin(angle)
+        mctheta = 1 - ctheta
+
+        self.transform[:3,:3] = self.transform[:3,:3] @ np.array([
+            [ctheta + (x**2)*mctheta, x*y*mctheta - z*stheta, x*z*mctheta + y*stheta],
+            [y*x*mctheta + z*stheta, ctheta + (y**2)*mctheta, y*z*mctheta - x*stheta],
+            [z*x*mctheta - y*stheta, z*y*mctheta + x*stheta, ctheta + (z**2)*mctheta]
+        ])
         
     def translate(self, x, y, z):
         """
